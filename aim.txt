@@ -1,0 +1,98 @@
+
+local player = game:GetService("Players").LocalPlayer
+if not player then
+    warn("Ce script doit être exécuté par un joueur.")
+    return
+end
+
+local function makeDraggable(frame, dragHandle)
+    local dragging = false
+    local dragInput, mousePos, framePos
+
+    dragHandle.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            mousePos = input.Position
+            framePos = frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    dragHandle.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement then
+            dragInput = input
+        end
+    end)
+
+    game:GetService("UserInputService").InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - mousePos
+            frame.Position = UDim2.new(
+                framePos.X.Scale,
+                framePos.X.Offset + delta.X,
+                framePos.Y.Scale,
+                framePos.Y.Offset + delta.Y
+            )
+        end
+    end)
+end
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "https://dsc.gg/ltes"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 200)
+frame.Position = UDim2.new(0.5, -150, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+frame.BorderSizePixel = 0
+frame.BackgroundTransparency = 0.2
+frame.Parent = screenGui
+
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 12)
+uiCorner.Parent = frame
+
+-- BY SWALEYRT
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 24
+title.Text = "Roblox4Cheat - SCRIPT AIMBOT"
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = frame
+
+-- join the discord https://discord.gg/atbk7jvtdm
+makeDraggable(frame, title)
+
+
+local button1 = Instance.new("TextButton")
+button1.Size = UDim2.new(0, 200, 0, 50)
+button1.Position = UDim2.new(0.5, -100, 0.5, -50)
+button1.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+button1.TextColor3 = Color3.fromRGB(255, 255, 255)
+button1.Font = Enum.Font.SourceSans
+button1.TextSize = 24
+button1.Text = "Script1"
+button1.Parent = frame
+
+
+local button1Corner = Instance.new("UICorner")
+button1Corner.CornerRadius = UDim.new(0, 12)
+button1Corner.Parent = button1
+
+
+button1.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Actyrn/Scripts/main/AzureModded"))()
+    screenGui:Destroy()  -- Ferme la fenêtre
+end)
+
